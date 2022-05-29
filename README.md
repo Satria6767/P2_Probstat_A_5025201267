@@ -294,6 +294,3 @@ Praktikum Modul 2 Probabilitas dan Statistik 2022 (Estimasi Parameter, Uji Hipot
           print(tukey.cld)
      ```
   <img width="583" alt="image" src="https://user-images.githubusercontent.com/86004023/170869674-ada599a1-38f7-4218-bb79-e541974fb218.png">
-
-# Referensi :
-  - 
