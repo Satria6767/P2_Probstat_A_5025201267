@@ -230,3 +230,70 @@ Praktikum Modul 2 Probabilitas dan Statistik 2022 (Estimasi Parameter, Uji Hipot
 
         
    </br>
+
+## Soal 5
+### Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk mengetahui pengaruh suhu operasi (100 ̊C, 125 ̊C dan 150 ̊C) dan tiga jenis kaca pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan dilakukan sebanyak 27 kali dan didapat data sebagai berikut: 
+   <img width="332" alt="image" src="https://user-images.githubusercontent.com/86004023/170867530-b11cf2dc-f084-403b-9028-f38097bb1d40.png">
+
+### A. Buatlah plot sederhana untuk visualisasi data
+
+   membaca file GTL.csv dari documents
+
+      ```
+        library(dplyr)
+        library(multcompView)
+
+        gtl <- read.csv(file.choose())
+      ```
+   <img width="905" alt="image" src="https://user-images.githubusercontent.com/86004023/170869335-af14ad73-5ced-415e-b45c-973564029064.png">
+
+  visualisasi menggunakan simple plot yaitu sebagai berikut
+  ```
+    qplot(x = Temp, y = Light, geom = "point", data = gtl) +
+    facet_grid(.~Glass, labeller = label_both)
+  ```
+  <img width="997" alt="Screen Shot 2022-05-29 at 19 45 00" src="https://user-images.githubusercontent.com/86004023/170869408-fbadc3d5-a4d9-47eb-8598-5099ad19058f.png">
+        
+   </br>
+        
+### B. Lakukan uji ANOVA dua arah
+       ```
+         gtl$Glass <- as.factor(gtl$Glass)
+         gtl$Temp_Factor <- as.factor(gtl$Temp)
+         str(gtl)
+
+         gtlaov <- aov(Light ~ Glass*Temp_Factor, data = gtl)
+         summary(gtlaov)
+        ```
+        
+   <img width="570" alt="image" src="https://user-images.githubusercontent.com/86004023/170869510-97c2a8c9-d482-40a9-a0de-4e452c611aad.png">  
+        </br>
+
+### C. Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
+     ```
+       data_summary <- group_by(gtl, Glass, Temp) %>%
+       summarise(mean=mean(Light), sd=sd(Light)) %>%
+       arrange(desc(mean))
+
+       print(data_summary)
+     ```
+   <img width="817" alt="image" src="https://user-images.githubusercontent.com/86004023/170869545-0426a637-abd9-4201-8ea7-197c9fe16d66.png">
+        
+   </br>
+   
+### D. Lakukan uji Tukey
+         ```
+          tukey <- TukeyHSD(gtlaov)
+          print(tukey)
+         ```
+   <img width="387" alt="image" src="https://user-images.githubusercontent.com/86004023/170869613-cdba8e46-27d2-4c13-b542-0b1130b3310b.png">
+ 
+### E. Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
+     ```
+          tukey.cld <- multcompLetters4(gtlaov, tukey)
+          print(tukey.cld)
+     ```
+  <img width="583" alt="image" src="https://user-images.githubusercontent.com/86004023/170869674-ada599a1-38f7-4218-bb79-e541974fb218.png">
+
+# Referensi :
+  - 
