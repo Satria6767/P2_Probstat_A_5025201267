@@ -145,3 +145,88 @@ Praktikum Modul 2 Probabilitas dan Statistik 2022 (Estimasi Parameter, Uji Hipot
 ### F. Kesimpulan
 
   Dengan tingkat keyakinan 95%, diyakini bahwa tidak terdapat perbedaan rata-rata saham pada perusahaan di Bandung dan Bali.
+  
+## Soal 4
+### Seorang Peneliti sedang meneliti spesies dari kucing di ITS . Dalam penelitiannya ia mengumpulkan data tiga spesies kucing yaitu kucing oren, kucing hitam dan kucing putih dengan panjangnya masing-masing.
+
+### A. Buatlah masing masing jenis spesies menjadi 3 subjek "Grup" (grup 1, grup 2, grup 3). Lalu Gambarkan plot kuantil normal untuk setiap kelompok dan lihat apakah ada outlier utama dalam homogenitas varians.
+    
+ membuat myFile menjadi group 
+      
+      ```
+        my_data <- read.delim(file.choose())
+
+        my_data$Group <- as.factor(my_data$Group)
+        my_data$Group = factor(my_data$Group, labels = c("grup1", "grup1", "grup3"))
+      ```
+  Lalu bagi tiap valuer menjadi 3 bagian ke 3 grup
+      
+      ```
+       grup1 <- subset(my_data, Group == "grup1")
+       grup2 <- subset(my_data, Group == "grup1")
+       grup3 <- subset(my_data, Group == "grup3")
+
+       qqnorm(grup1$Length)
+
+       qqnorm(grup2$Length)
+
+       qqnorm(grup3$Length)
+      ```
+
+   Sehingga Hasilnya sebagai berikut:
+
+   <img width="786" alt="image" src="https://user-images.githubusercontent.com/86004023/170870831-84d7d058-7ced-45e5-9cd1-215a440afce0.png">
+   </br>
+ 
+### B. Carilah atau periksalah Homogeneity of variances nya , Berapa nilai p yang didapatkan? Apa hipotesis dan kesimpulan yang dapat diambil?
+
+        ```
+           bartlett.test(Length ~ Group, data = my_data)
+        ```
+        
+  Kesimpulan yang didapatkan yaitu Bartlett's K-squared memiliki nilai sebesar 0.43292 dan df bernilai 2
+  Sehingga Hasilnya sebagai berikut:
+
+  <img width="608" alt="image" src="https://user-images.githubusercontent.com/86004023/170871015-41c0838b-197e-4cf9-ad70-4b9fecdb8414.png">   
+     </br>
+
+### C. Untuk uji ANOVA (satu arah), buatlah model linier dengan Panjang versus Grup dan beri nama model tersebut model 1.
+
+        ```
+         model1 <- aov(Length ~ Group, data = my_data)
+         summary(model1)
+        ```
+ Sehingga Hasilnya sebagai berikut:
+
+ <img width="681" alt="image" src="https://user-images.githubusercontent.com/86004023/170871118-50c6c66e-c9b1-4873-94f4-688c012340ad.png">        
+        
+  </br>     
+  
+### D. Dari Hasil Poin C, Berapakah nilai-p ? , Apa yang dapat Anda simpulkan dari H0?
+
+ Nilai p adalah 0.0013 dimana kurang dari 0.005, sehingga h0 ditolak
+
+### E. Verifikasilah jawaban model 1 dengan Post-hoc test Tukey HSD, dari nilai p yang didapatkan apakah satu jenis kucing lebih panjang dari yang lain? Jelaskan.
+
+        ```
+         TukeyHSD(model1)
+        ```
+   Sehingga Hasilnya sebagai berikut:
+
+   <img width="615" alt="image" src="https://user-images.githubusercontent.com/86004023/170871161-3a9a1a94-1302-4eed-a7ca-9bfe3c4eee24.png">     
+        </br>
+
+### F. Visualisasikan data dengan ggplot2
+
+       ```
+        library("ggplot2") 
+        ggplot(my_data, aes(x = Group, y = Length)) + 
+        geom_boxplot(fill = "white", colour = "black") + 
+        scale_x_discrete() + xlab("Group") + ylab("Length")
+        ```
+   Sehingga Hasilnya sebagai berikut:
+
+  <img width="1210" alt="image" src="https://user-images.githubusercontent.com/86004023/170870866-4728bf66-3c96-4618-b24e-1c0fbcfa18df.png">
+
+        
+   </br>
